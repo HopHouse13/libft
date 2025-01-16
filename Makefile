@@ -6,47 +6,56 @@
 #    By: pbret <pbret@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/21 16:53:10 by pbret             #+#    #+#              #
-#    Updated: 2024/06/12 15:32:54 by pbret            ###   ########.fr        #
+#    Updated: 2025/01/16 12:34:31 by pbret            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS			=	ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isdigit.c \
-				ft_isprint.c ft_isascii.c ft_memcpy.c ft_memset.c ft_strlen.c \
-				ft_memmove.c ft_memchr.c ft_memcmp.c ft_strlcpy.c ft_strlcat.c \
-				ft_strchr.c ft_strrchr.c ft_strncmp.c ft_strnstr.c ft_toupper.c \
-				ft_tolower.c ft_atoi.c ft_calloc.c ft_strdup.c ft_substr.c \
-				ft_strjoin.c ft_strtrim.c ft_itoa.c ft_strmapi.c ft_striteri.c \
-				ft_putchar_fd.c ft_putstr_fd.c ft_split.c ft_putendl_fd.c \
-				ft_putnbr_fd.c \
+NAME		= libft
+LIBRARY		= $(NAME).a
+SRCS_DIR	= srcs
+OBJ_DIR 	= obj_$(NAME)
 
-BONUS			=	ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c \
-				ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstdelone_bonus.c \
-				ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c \
+SRCS		= srcs/ft_bzero.c srcs/ft_isalnum.c srcs/ft_isalpha.c \
+			srcs/ft_isdigit.c srcs/ft_isprint.c srcs/ft_isascii.c \
+			srcs/ft_memcpy.c srcs/ft_memset.c srcs/ft_strlen.c \
+			srcs/ft_memmove.c srcs/ft_memchr.c srcs/ft_memcmp.c \
+			srcs/ft_strlcpy.c srcs/ft_strlcat.c srcs/ft_strchr.c \
+			srcs/ft_strrchr.c srcs/ft_strncmp.c srcs/ft_strnstr.c \
+			srcs/ft_toupper.c srcs/ft_tolower.c srcs/ft_atoi.c \
+			srcs/ft_calloc.c srcs/ft_strdup.c srcs/ft_substr.c \
+			srcs/ft_strjoin.c srcs/ft_strtrim.c srcs/ft_itoa.c \
+			srcs/ft_strmapi.c srcs/ft_striteri.c srcs/ft_putchar_fd.c \
+			srcs/ft_putstr_fd.c srcs/ft_split.c srcs/ft_putendl_fd.c \
+			srcs/ft_putnbr_fd.c srcs/ft_lstnew_bonus.c \
+			srcs/ft_lstadd_front_bonus.c srcs/ft_lstsize_bonus.c \
+			srcs/ft_lstlast_bonus.c srcs/ft_lstadd_back_bonus.c\
+			srcs/ft_lstdelone_bonus.c srcs/ft_lstclear_bonus.c \
+			srcs/ft_lstiter_bonus.c srcs/ft_lstmap_bonus.c
+						
+OBJS		= $(SRCS:$(SRCS_DIR)/%.c=$(OBJ_DIR)/%.o)
+CC			= cc
+RM			= rm -rf
+AR			= ar rcs
+CFLAGS		= -Wall -Wextra -Werror -ggdb -I$(SRCS_DIR)
 
-OBJS			= $(SRCS:.c=.o)
-BONUS_OBJS		= $(BONUS:.c=.o)
-CC				= cc
-RM				= rm -f
-CFLAGS			= -Wall -Wextra -Werror -c -I.
+all:		$(LIBRARY)
 
-NAME			= libft.a
+$(LIBRARY):	$(OBJS) 
+			$(AR) $(LIBRARY) $(OBJS)
+			@echo "\033[32m""Compilation de $(LIBRARY) est terminée!""\033[0m"
 
-all:			$(NAME)
-
-$(NAME):
-				$(CC) $(CFLAGS) $(SRCS) 
-				ar rcs $(NAME) $(OBJS)
-
-bonus:
-				$(CC) $(CFLAGS) $(BONUS)
-				ar rcs $(NAME) $(BONUS_OBJS)
-
+$(OBJ_DIR)/%.o : $(SRCS_DIR)/%.c
+			@mkdir -p $(@D)
+			$(CC) $(CFLAGS) -c $< -o $@
+	
 clean:
-				$(RM) $(OBJS) $(BONUS_OBJS)
+			$(RM) $(OBJ_DIR)
+			@echo "\033[36m""Répertoire $(OBJ_DIR) supprimé.""\033[0m"
 
-fclean:			clean
-				$(RM) $(NAME)
+fclean:		clean
+			$(RM) $(LIBRARY)
+			@echo "\033[36m""Fichier $(LIBRARY) supprimé.""\033[0m"
 
-re:				fclean all
+re:			fclean 	all
 
-.PHONY: clean fclean re bonus
+.PHONY: all clean fclean re
